@@ -95,7 +95,7 @@ export function LoginForm({
                         <FormLabel className="flex justify-between">
                           Password{" "}
                           <Link
-                            href="/reset-password"
+                            href="/forgot-password"
                             className="underline font-normal text-primary"
                           >
                             Forgot your password?
