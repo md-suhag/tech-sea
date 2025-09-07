@@ -1,3 +1,4 @@
+"use client";
 import { Button } from "@/components/ui/button";
 import {
   NavigationMenu,
@@ -10,7 +11,9 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
+import { useAuth } from "@/context/AuthContext";
 import Link from "next/link";
+import UserMenu from "./user-menu";
 
 const navigationLinks = [
   { href: "/", label: "Home", active: true },
@@ -19,6 +22,7 @@ const navigationLinks = [
 ];
 
 export default function Navbar() {
+  const { user } = useAuth();
   return (
     <header className="border-b px-4">
       <div className="flex h-16 items-center justify-between gap-4">
@@ -102,12 +106,17 @@ export default function Navbar() {
         </div>
         {/* Right side */}
         <div className="flex items-center gap-2">
-          <Button asChild variant="ghost" size="sm" className="text-sm">
-            <Link href="/login">Login</Link>
-          </Button>
-          <Button asChild size="sm" className="text-sm">
-            <Link href="/register">Register</Link>
-          </Button>
+          {!user && (
+            <>
+              <Button asChild variant="ghost" size="sm" className="text-sm">
+                <Link href="/login">Login</Link>
+              </Button>
+              <Button asChild size="sm" className="text-sm">
+                <Link href="/register">Register</Link>
+              </Button>
+            </>
+          )}
+          {user && <UserMenu />}
         </div>
       </div>
     </header>

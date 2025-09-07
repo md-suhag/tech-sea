@@ -22,6 +22,8 @@ import { Input } from "@/components/ui/input";
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
+import { myFetch } from "@/utils/myFetch";
+import { toast } from "sonner";
 
 const forgotPasswordSchema = z.object({
   email: z.email("Invalid email address"),
@@ -40,13 +42,27 @@ export function ForgotPasswordForm({
 
   const onSubmit = async (data: z.infer<typeof forgotPasswordSchema>) => {
     try {
-    } catch (error) {}
+      const res = await myFetch("/auth/forgot-password", {
+        method: "POST",
+        body: data,
+      });
+
+      if (res.success) {
+        toast.success("Email sent to your account for reset");
+      } else {
+        toast.error(res.message || "Something went wrong");
+      }
+    } catch (error: unknown) {
+      toast.error(
+        error instanceof Error ? error.message : "Error fetching data"
+      );
+    }
   };
   return (
     <div className={cn("flex flex-col gap-6", className)} {...props}>
       <Card>
         <CardHeader className="text-center">
-          <CardTitle className="text-xl">Forgot Password</CardTitle>
+          <CardTitle className="text-xl">Forgot Password ?</CardTitle>
           <CardDescription>
             Enter your email to reset your password
           </CardDescription>
@@ -70,16 +86,17 @@ export function ForgotPasswordForm({
                       </FormItem>
                     )}
                   />
-                  <Button type="submit" className="w-full">
-                    Send
+                  <Button
+                    type="submit"
+                    className="w-full"
+                    disabled={form.formState.isSubmitting}
+                  >
+                    {form.formState.isSubmitting ? "Sending..." : "Send"}
                   </Button>
                 </div>
                 <div className="text-center text-sm">
                   Remember your password?{" "}
-                  <Link
-                    href="/login"
-                    className="underline underline-offset-4"
-                  >
+                  <Link href="/login" className="underline underline-offset-4">
                     Login
                   </Link>
                 </div>

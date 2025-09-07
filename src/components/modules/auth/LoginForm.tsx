@@ -23,6 +23,10 @@ import { Input } from "@/components/ui/input";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import Password from "@/components/ui/Password";
+import { config } from "@/config/env-config";
+import { toast } from "sonner";
+import { useRouter } from "next/navigation";
+import { useAuth } from "@/context/AuthContext";
 
 const loginSchema = z.object({
   email: z.email("Invalid email address"),
@@ -33,6 +37,8 @@ export function LoginForm({
   className,
   ...props
 }: React.ComponentProps<"div">) {
+  const { setUser } = useAuth();
+  const router = useRouter();
   const form = useForm<z.infer<typeof loginSchema>>({
     resolver: zodResolver(loginSchema),
     defaultValues: {
@@ -43,7 +49,25 @@ export function LoginForm({
 
   const onSubmit = async (data: z.infer<typeof loginSchema>) => {
     try {
-    } catch (error) {}
+      const response = await fetch(`${config.baseURL}/auth/login`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
+        body: JSON.stringify(data),
+      });
+      const result = await response.json();
+      if (result.success) {
+        toast.success("Login successful");
+        setUser(result?.data.user);
+        router.push("/");
+      } else {
+        toast.error(result?.message || "Login failed");
+      }
+    } catch (error) {
+      toast.error("Login failed");
+    }
   };
   return (
     <div className={cn("flex flex-col gap-6", className)} {...props}>
@@ -108,8 +132,12 @@ export function LoginForm({
                       </FormItem>
                     )}
                   />
-                  <Button type="submit" className="w-full">
-                    Login
+                  <Button
+                    type="submit"
+                    className="w-full"
+                    disabled={form.formState.isSubmitting}
+                  >
+                    {form.formState.isSubmitting ? "Logging in.." : "Login"}
                   </Button>
                 </div>
                 <div className="text-center text-sm">

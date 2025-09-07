@@ -21,6 +21,9 @@ import {
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import Password from "@/components/ui/Password";
+import { useRouter, useSearchParams } from "next/navigation";
+import { myFetch } from "@/utils/myFetch";
+import { toast } from "sonner";
 
 const resetPasswordSchema = z
   .object({
@@ -38,6 +41,11 @@ export function ResetPasswordForm({
   className,
   ...props
 }: React.ComponentProps<"div">) {
+  const searchParams = useSearchParams();
+  const token = searchParams.get("token") ?? undefined;
+  const id = searchParams.get("id");
+  const router = useRouter();
+
   const form = useForm<z.infer<typeof resetPasswordSchema>>({
     resolver: zodResolver(resetPasswordSchema),
     defaultValues: {
@@ -47,9 +55,32 @@ export function ResetPasswordForm({
   });
 
   const onSubmit = async (data: z.infer<typeof resetPasswordSchema>) => {
+    const payload = {
+      id,
+      newPassword: data.password,
+    };
     try {
-    } catch (error) {}
+      const res = await myFetch("/auth/reset-password", {
+        method: "POST",
+        body: payload,
+        token,
+      });
+
+      if (res.success) {
+        toast.success("Password reset successful");
+        router.push("/login");
+      } else {
+        toast.error(res.message || "Something went wrong");
+      }
+    } catch (error: unknown) {
+      toast.error(
+        error instanceof Error ? error.message : "Error fetching data"
+      );
+    }
   };
+  if (!token || !id) {
+    return <div className="text-center font-semibold">Invalid link</div>;
+  }
   return (
     <div className={cn("flex flex-col gap-6", className)} {...props}>
       <Card>
@@ -88,8 +119,12 @@ export function ResetPasswordForm({
                       </FormItem>
                     )}
                   />
-                  <Button type="submit" className="w-full">
-                    Submit
+                  <Button
+                    type="submit"
+                    className="w-full"
+                    disabled={form.formState.isSubmitting}
+                  >
+                    {form.formState.isSubmitting ? "Submitting" : "Submit"}
                   </Button>
                 </div>
               </div>
