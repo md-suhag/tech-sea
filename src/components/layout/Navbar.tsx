@@ -13,6 +13,7 @@ import {
 } from "@/components/ui/popover";
 import { useAuth } from "@/context/AuthContext";
 import Link from "next/link";
+import UserMenu from "./user-menu";
 
 const navigationLinks = [
   { href: "/", label: "Home", active: true },
@@ -115,9 +116,7 @@ export default function Navbar() {
               </Button>
             </>
           )}
-          {user && (
-            <span className="text-sm font-medium">Hello, {user.name}</span>
-          )}
+          {user && <UserMenu />}
         </div>
       </div>
     </header>
