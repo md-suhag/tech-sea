@@ -63,7 +63,6 @@ export function LoginForm({
         toast.success("Login successful");
         setUser(result?.data.user);
         router.push("/");
-      } else {
       }
     } catch (error) {
       toast.error("Login failed");
@@ -132,8 +131,12 @@ export function LoginForm({
                       </FormItem>
                     )}
                   />
-                  <Button type="submit" className="w-full">
-                    Login
+                  <Button
+                    type="submit"
+                    className="w-full"
+                    disabled={form.formState.isSubmitting}
+                  >
+                    {form.formState.isSubmitting ? "Logging in.." : "Login"}
                   </Button>
                 </div>
                 <div className="text-center text-sm">

@@ -23,9 +23,12 @@ import { Input } from "@/components/ui/input";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import Password from "@/components/ui/Password";
+import { config } from "@/config/env-config";
+import { toast } from "sonner";
+import { useRouter } from "next/navigation";
 
 const registerSchema = z.object({
-  name: z.string(),
+  name: z.string().min(2, "Name must be at least 2 characters"),
   email: z.email("Invalid email address"),
   password: z.string().min(6, "Password must be at least 6 characters"),
 });
@@ -34,6 +37,7 @@ export function RegisterForm({
   className,
   ...props
 }: React.ComponentProps<"div">) {
+  const router = useRouter();
   const form = useForm<z.infer<typeof registerSchema>>({
     resolver: zodResolver(registerSchema),
     defaultValues: {
@@ -45,7 +49,22 @@ export function RegisterForm({
 
   const onSubmit = async (data: z.infer<typeof registerSchema>) => {
     try {
-    } catch (error) {}
+      const response = await fetch(`${config.baseURL}/auth/register`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
+        body: JSON.stringify(data),
+      });
+      const result = await response.json();
+      console.log(result);
+      if (result.success) {
+        toast.success(result.message);
+      }
+    } catch (error) {
+      toast.error("Registration failed");
+    }
   };
   return (
     <div className={cn("flex flex-col gap-6", className)} {...props}>
@@ -116,8 +135,14 @@ export function RegisterForm({
                       </FormItem>
                     )}
                   />
-                  <Button type="submit" className="w-full">
-                    Register
+                  <Button
+                    type="submit"
+                    className="w-full"
+                    disabled={form.formState.isSubmitting}
+                  >
+                    {form.formState.isSubmitting
+                      ? "Registering..."
+                      : "Register"}
                   </Button>
                 </div>
                 <div className="text-center text-sm">
