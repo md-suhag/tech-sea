@@ -58,11 +58,12 @@ export function LoginForm({
         body: JSON.stringify(data),
       });
       const result = await response.json();
-      console.log(result);
       if (result.success) {
         toast.success("Login successful");
         setUser(result?.data.user);
         router.push("/");
+      } else {
+        toast.error(result?.message || "Login failed");
       }
     } catch (error) {
       toast.error("Login failed");
