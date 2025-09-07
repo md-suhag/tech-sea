@@ -14,10 +14,25 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { useAuth } from "@/context/AuthContext";
 import Link from "next/link";
+import { myFetch } from "@/utils/myFetch";
+import { toast } from "sonner";
 
 export default function DashboardUserMenu() {
-  const { user } = useAuth();
+  const { user, setUser } = useAuth();
+  const handleLogout = async () => {
+    try {
+      const response = await myFetch("/auth/logout", {
+        method: "POST",
+      });
 
+      if (response.success) {
+        toast.success("Logged out successful");
+        setUser(null);
+      } else toast.error("Logout fail");
+    } catch (error) {
+      toast.error("Logout fail");
+    }
+  };
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -58,7 +73,7 @@ export default function DashboardUserMenu() {
           </DropdownMenuItem>
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
-        <DropdownMenuItem>
+        <DropdownMenuItem onClick={handleLogout}>
           <LogOutIcon size={16} className="opacity-60" aria-hidden="true" />
           <span>Logout</span>
         </DropdownMenuItem>
