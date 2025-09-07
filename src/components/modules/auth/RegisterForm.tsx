@@ -24,24 +24,26 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import Password from "@/components/ui/Password";
 
-const loginSchema = z.object({
+const registerSchema = z.object({
+  name: z.string(),
   email: z.email("Invalid email address"),
   password: z.string().min(6, "Password must be at least 6 characters"),
 });
 
-export function LoginForm({
+export function RegisterForm({
   className,
   ...props
 }: React.ComponentProps<"div">) {
-  const form = useForm<z.infer<typeof loginSchema>>({
-    resolver: zodResolver(loginSchema),
+  const form = useForm<z.infer<typeof registerSchema>>({
+    resolver: zodResolver(registerSchema),
     defaultValues: {
+      name: "",
       email: "",
       password: "",
     },
   });
 
-  const onSubmit = async (data: z.infer<typeof loginSchema>) => {
+  const onSubmit = async (data: z.infer<typeof registerSchema>) => {
     try {
     } catch (error) {}
   };
@@ -50,7 +52,7 @@ export function LoginForm({
       <Card>
         <CardHeader className="text-center">
           <CardTitle className="text-xl">Welcome back</CardTitle>
-          <CardDescription>Login with your Google account</CardDescription>
+          <CardDescription>Register with your Google account</CardDescription>
         </CardHeader>
         <CardContent>
           <Form {...form}>
@@ -64,7 +66,7 @@ export function LoginForm({
                         fill="currentColor"
                       />
                     </svg>
-                    Login with Google
+                    Continue with Google
                   </Button>
                 </div>
                 <div className="after:border-border relative text-center text-sm after:absolute after:inset-0 after:top-1/2 after:z-0 after:flex after:items-center after:border-t">
@@ -73,6 +75,20 @@ export function LoginForm({
                   </span>
                 </div>
                 <div className="grid gap-6">
+                  <FormField
+                    control={form.control}
+                    name="name"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Name</FormLabel>
+                        <FormControl>
+                          <Input placeholder="Enter your Name" {...field} />
+                        </FormControl>
+
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
                   <FormField
                     control={form.control}
                     name="email"
@@ -92,15 +108,7 @@ export function LoginForm({
                     name="password"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel className="flex justify-between">
-                          Password{" "}
-                          <Link
-                            href="/reset-password"
-                            className="underline font-normal text-primary"
-                          >
-                            Forgot your password?
-                          </Link>
-                        </FormLabel>
+                        <FormLabel>Password</FormLabel>
                         <FormControl>
                           <Password {...field} />
                         </FormControl>
@@ -109,16 +117,13 @@ export function LoginForm({
                     )}
                   />
                   <Button type="submit" className="w-full">
-                    Login
+                    Register
                   </Button>
                 </div>
                 <div className="text-center text-sm">
-                  Don&apos;t have an account?{" "}
-                  <Link
-                    href="/register"
-                    className="underline underline-offset-4"
-                  >
-                    Register
+                  Already have an account?
+                  <Link href="/login" className="underline underline-offset-4">
+                    Login
                   </Link>
                 </div>
               </div>
