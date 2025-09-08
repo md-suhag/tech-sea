@@ -67,7 +67,7 @@ const CreateBlog = () => {
   };
 
   return (
-    <div className="w-full p-4">
+    <div className="">
       <h1 className="text-3xl font-bold text-center">Create New Blog</h1>
       <div className="mt-8">
         <Form {...form}>

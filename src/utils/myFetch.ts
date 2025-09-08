@@ -7,7 +7,7 @@ export interface FetchResponse {
   success: boolean;
   message?: string;
   data?: any;
-  pagination?: {
+  meta?: {
     total: number;
     page: number;
     limit: number;
@@ -73,7 +73,7 @@ export const myFetch = async (
         success: data?.success ?? true,
         message: data?.message,
         data: data?.data,
-        pagination: data?.pagination,
+        meta: data?.meta,
         error: null,
       };
     }
