@@ -59,8 +59,10 @@ export function LoginForm({
       });
       const result = await response.json();
       if (result.success) {
+        form.reset();
         toast.success("Login successful");
         setUser(result?.data.user);
+
         router.push("/");
       } else {
         toast.error(result?.message || "Login failed");
