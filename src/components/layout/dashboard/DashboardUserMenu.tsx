@@ -32,6 +32,7 @@ export default function DashboardUserMenu() {
         setUser(null);
         router.push("/");
       } else toast.error("Logout fail");
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (error) {
       toast.error("Logout fail");
     }

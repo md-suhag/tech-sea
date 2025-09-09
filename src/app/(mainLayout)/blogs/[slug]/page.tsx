@@ -7,10 +7,8 @@ import Image from "next/image";
 
 export default async function BlogDetails({
   params,
-  searchParams,
 }: {
   params: { slug: string };
-  searchParams: { [key: string]: string | string[] | undefined };
 }) {
   const { slug } = await params;
   const res = await myFetch(`/blogs/${slug}`, {

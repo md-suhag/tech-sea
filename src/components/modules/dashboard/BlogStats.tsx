@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { myFetch } from "@/utils/myFetch";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Book, BarChart2 } from "lucide-react";
+import { BarChart2 } from "lucide-react";
 import { formatCategoryName } from "./../../../utils/formatCategory";
 
 import { fillMonthlyStats } from "@/utils/stats";

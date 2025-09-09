@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 "use client";
 import { LayoutDashboard, LogOutIcon, UserPenIcon } from "lucide-react";
 

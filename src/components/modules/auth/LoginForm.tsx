@@ -67,6 +67,7 @@ export function LoginForm({
       } else {
         toast.error(result?.message || "Login failed");
       }
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (error) {
       toast.error("Login failed");
     }

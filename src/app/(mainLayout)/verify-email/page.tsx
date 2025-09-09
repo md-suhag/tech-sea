@@ -26,6 +26,7 @@ const VerifyEmail = () => {
         toast.success("Email verified successfully");
         router.push("/login");
       }
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (error) {
       toast.error("verification failed");
     }
@@ -33,6 +34,7 @@ const VerifyEmail = () => {
 
   useEffect(() => {
     verify();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [token]);
 
   return (

@@ -32,7 +32,6 @@ const bottomLinks = [
   { text: "Privacy Policy", url: "#" },
 ];
 
-import logo from "@/assets/logo.png";
 import Link from "next/link";
 export default function Footer() {
   return (
