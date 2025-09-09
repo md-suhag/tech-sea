@@ -16,9 +16,11 @@ import { useAuth } from "@/context/AuthContext";
 import Link from "next/link";
 import { myFetch } from "@/utils/myFetch";
 import { toast } from "sonner";
+import { useRouter } from "next/navigation";
 
 export default function DashboardUserMenu() {
   const { user, setUser } = useAuth();
+  const router = useRouter();
   const handleLogout = async () => {
     try {
       const response = await myFetch("/auth/logout", {
@@ -28,6 +30,7 @@ export default function DashboardUserMenu() {
       if (response.success) {
         toast.success("Logged out successful");
         setUser(null);
+        router.push("/");
       } else toast.error("Logout fail");
     } catch (error) {
       toast.error("Logout fail");
