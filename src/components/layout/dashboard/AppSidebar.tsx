@@ -19,6 +19,16 @@ import Link from "next/link";
 const data = {
   navMain: [
     {
+      title: "Dashboard",
+      url: "#",
+      items: [
+        {
+          title: "Analytics",
+          url: "/dashboard",
+        },
+      ],
+    },
+    {
       title: "Blogs",
       url: "#",
       items: [
