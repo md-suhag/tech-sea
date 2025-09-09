@@ -15,7 +15,7 @@ import { myFetch } from "@/utils/myFetch";
 import { toast } from "sonner";
 import { revalidateTags } from "@/helpers/revalidateHelper";
 
-const CommentBox = ({ id }: { id: string }) => {
+const CommentBox = ({ id,slug }: { id: string ,slug:string}) => {
   const [comment, setComment] = useState("");
 
   const handleSubmit = async () => {
@@ -30,7 +30,7 @@ const CommentBox = ({ id }: { id: string }) => {
     });
     if (res.success) {
       toast.success("Comment Added");
-
+      await revalidateTags([`comments/${id}`,`blogs/${slug}`]);
       setComment("");
     }
   };

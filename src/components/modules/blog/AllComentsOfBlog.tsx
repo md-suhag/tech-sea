@@ -14,7 +14,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 const AllComentsOfBlog = async ({ id }: { id: string }) => {
   const res = await myFetch(`/blogs/${id}/comments`, {
     method: "GET",
-    tags: ["comments"],
+    tags: [`comments/${id}`],
   });
 
   return (
