@@ -55,7 +55,11 @@ export default function UserMenu() {
 
         <DropdownMenuGroup>
           <DropdownMenuItem asChild>
-            <Link href="/dashboard">
+            <Link
+              href={
+                user?.role === "USER" ? "/dashboard/user" : "/dashboard/admin"
+              }
+            >
               <LayoutDashboard
                 size={16}
                 className="opacity-60"
@@ -66,7 +70,6 @@ export default function UserMenu() {
           </DropdownMenuItem>
           <DropdownMenuItem asChild>
             <Link href="#">
-              {" "}
               <UserPenIcon
                 size={16}
                 className="opacity-60"

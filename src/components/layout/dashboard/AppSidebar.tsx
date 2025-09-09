@@ -1,3 +1,4 @@
+"use client";
 import * as React from "react";
 
 import {
@@ -14,9 +15,9 @@ import {
   SidebarRail,
 } from "@/components/ui/sidebar";
 import Link from "next/link";
+import { useAuth } from "@/context/AuthContext";
 
-// This is sample data.
-const data = {
+const adminData = {
   navMain: [
     {
       title: "Dashboard",
@@ -24,7 +25,7 @@ const data = {
       items: [
         {
           title: "Analytics",
-          url: "/dashboard",
+          url: "/dashboard/admin",
         },
       ],
     },
@@ -56,8 +57,38 @@ const data = {
     },
   ],
 };
+const userData = {
+  navMain: [
+    {
+      title: "Dashboard",
+      url: "#",
+      items: [
+        {
+          title: "Analytics",
+          url: "/dashboard/user",
+        },
+      ],
+    },
+    {
+      title: "Blogs",
+      url: "#",
+      items: [
+        {
+          title: "My Blogs",
+          url: "/dashboard/user/blog",
+          isActive: true,
+        },
+        {
+          title: "Create Blog",
+          url: "/dashboard/user/blog/create",
+        },
+      ],
+    },
+  ],
+};
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
+  const { user } = useAuth();
   return (
     <Sidebar {...props}>
       <SidebarHeader>
@@ -66,26 +97,54 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       <SidebarContent>
         <SidebarGroup>
           <SidebarMenu>
-            {data.navMain.map((item) => (
-              <SidebarMenuItem key={item.title}>
-                <SidebarMenuButton asChild>
-                  <Link href={item.url} className="font-medium">
-                    {item.title}
-                  </Link>
-                </SidebarMenuButton>
-                {item.items?.length ? (
-                  <SidebarMenuSub>
-                    {item.items.map((item) => (
-                      <SidebarMenuSubItem key={item.title}>
-                        <SidebarMenuSubButton asChild isActive={item.isActive}>
-                          <Link href={item.url}>{item.title}</Link>
-                        </SidebarMenuSubButton>
-                      </SidebarMenuSubItem>
-                    ))}
-                  </SidebarMenuSub>
-                ) : null}
-              </SidebarMenuItem>
-            ))}
+            {(user?.role === "ADMIN" || user?.role === "SUPER_ADMIN") &&
+              adminData.navMain.map((item) => (
+                <SidebarMenuItem key={item.title}>
+                  <SidebarMenuButton asChild>
+                    <Link href={item.url} className="font-medium">
+                      {item.title}
+                    </Link>
+                  </SidebarMenuButton>
+                  {item.items?.length ? (
+                    <SidebarMenuSub>
+                      {item.items.map((item) => (
+                        <SidebarMenuSubItem key={item.title}>
+                          <SidebarMenuSubButton
+                            asChild
+                            isActive={item.isActive}
+                          >
+                            <Link href={item.url}>{item.title}</Link>
+                          </SidebarMenuSubButton>
+                        </SidebarMenuSubItem>
+                      ))}
+                    </SidebarMenuSub>
+                  ) : null}
+                </SidebarMenuItem>
+              ))}
+            {user?.role === "USER" &&
+              userData.navMain.map((item) => (
+                <SidebarMenuItem key={item.title}>
+                  <SidebarMenuButton asChild>
+                    <Link href={item.url} className="font-medium">
+                      {item.title}
+                    </Link>
+                  </SidebarMenuButton>
+                  {item.items?.length ? (
+                    <SidebarMenuSub>
+                      {item.items.map((item) => (
+                        <SidebarMenuSubItem key={item.title}>
+                          <SidebarMenuSubButton
+                            asChild
+                            isActive={item.isActive}
+                          >
+                            <Link href={item.url}>{item.title}</Link>
+                          </SidebarMenuSubButton>
+                        </SidebarMenuSubItem>
+                      ))}
+                    </SidebarMenuSub>
+                  ) : null}
+                </SidebarMenuItem>
+              ))}
           </SidebarMenu>
         </SidebarGroup>
       </SidebarContent>
