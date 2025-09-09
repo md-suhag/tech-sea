@@ -14,9 +14,12 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { myFetch } from "@/utils/myFetch";
 import { toast } from "sonner";
 import { revalidateTags } from "@/helpers/revalidateHelper";
+import { useAuth } from "@/context/AuthContext";
+import Link from "next/link";
 
-const CommentBox = ({ id,slug }: { id: string ,slug:string}) => {
+const CommentBox = ({ id, slug }: { id: string; slug: string }) => {
   const [comment, setComment] = useState("");
+  const { user } = useAuth();
 
   const handleSubmit = async () => {
     if (!comment.trim()) return;
@@ -30,13 +33,13 @@ const CommentBox = ({ id,slug }: { id: string ,slug:string}) => {
     });
     if (res.success) {
       toast.success("Comment Added");
-      await revalidateTags([`comments/${id}`,`blogs/${slug}`]);
+      await revalidateTags([`comments/${id}`, `blogs/${slug}`]);
       setComment("");
     }
   };
 
   return (
-    <Card className="w-full max-w-2xl mx-auto shadow-md rounded-2xl">
+    <Card className="w-full max-w-md gap-3 py-3 ">
       <CardHeader className="flex flex-row items-center gap-3">
         <Avatar>
           <AvatarImage src="/avatar.png" alt="User" />
@@ -55,10 +58,19 @@ const CommentBox = ({ id,slug }: { id: string ,slug:string}) => {
       </CardContent>
 
       <CardFooter className="flex justify-end gap-2">
-        <Button variant="outline" onClick={() => setComment("")}>
-          Cancel
-        </Button>
-        <Button onClick={handleSubmit}>Post</Button>
+        {user && (
+          <>
+            <Button variant="outline" onClick={() => setComment("")}>
+              Cancel
+            </Button>
+            <Button onClick={handleSubmit}>Post</Button>
+          </>
+        )}
+        {!user && (
+          <Button className="ml-auto">
+            <Link href="/login">Login to comment</Link>
+          </Button>
+        )}
       </CardFooter>
     </Card>
   );

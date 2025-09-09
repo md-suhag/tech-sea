@@ -37,8 +37,8 @@ export default async function BlogDetails({
         className="w-full  "
       />
       <BlogContent content={res.data?.description ?? ""} />
-      <Reaction id={res.data?._id} slug={res.data?.slug} />
-      <p>{res.data?.likes}</p>
+      <Reaction data={res?.data} />
+
       <CommentBox id={res.data?._id} slug={res.data?.slug} />
       {/* Comments Section */}
       <AllComentsOfBlog id={res.data?._id} />
