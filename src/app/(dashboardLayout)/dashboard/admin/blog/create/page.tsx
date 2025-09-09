@@ -21,6 +21,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { myFetch } from "@/utils/myFetch";
+import { toast } from "sonner";
 
 const blogSchema = z.object({
   title: z.string().min(1, "Title is required"),
@@ -40,17 +42,32 @@ const CreateBlog = () => {
     },
   });
 
-  const onSubmit = (data: z.infer<typeof blogSchema>) => {
+  const onSubmit = async (data: z.infer<typeof blogSchema>) => {
     const formData = new FormData();
-    console.log(data);
     const { image, ...blogData } = data;
-
     formData.append("data", JSON.stringify(blogData));
     formData.append("image", image[0]);
+    try {
+      const res = await myFetch("/blogs", {
+        method: "POST",
+        body: formData,
+      });
+
+      if (res.success) {
+        form.reset();
+        toast.success("Blog creation successful");
+      } else {
+        toast.error(res.message || "Something went wrong");
+      }
+    } catch (error: unknown) {
+      toast.error(
+        error instanceof Error ? error.message : "Error fetching data"
+      );
+    }
   };
 
   return (
-    <div className="w-full p-4">
+    <div className="">
       <h1 className="text-3xl font-bold text-center">Create New Blog</h1>
       <div className="mt-8">
         <Form {...form}>
@@ -133,7 +150,9 @@ const CreateBlog = () => {
               )}
             />
 
-            <Button type="submit">Submit</Button>
+            <Button type="submit" disabled={form.formState.isSubmitting}>
+              {form.formState.isSubmitting ? "Submitting" : "Submit"}
+            </Button>
           </form>
         </Form>
       </div>

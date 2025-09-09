@@ -26,7 +26,7 @@ export default function layout({ children }: { children: React.ReactNode }) {
             <DashboardUserMenu />
           </div>
         </header>
-        <div className="rounded-xl flex-1 bg-white">{children}</div>
+        <div className="rounded-xl flex-1 bg-white w-full p-4">{children}</div>
       </SidebarInset>
     </SidebarProvider>
   );

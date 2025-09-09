@@ -37,7 +37,7 @@ export default function UserMenu() {
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Button variant="ghost" className="h-auto p-0 hover:bg-transparent">
-          <Avatar>
+          <Avatar className="border border-primary/40">
             <AvatarImage src="./avatar.jpg" alt="Profile image" />
             <AvatarFallback>User</AvatarFallback>
           </Avatar>
@@ -55,7 +55,11 @@ export default function UserMenu() {
 
         <DropdownMenuGroup>
           <DropdownMenuItem asChild>
-            <Link href="/dashboard">
+            <Link
+              href={
+                user?.role === "USER" ? "/dashboard/user" : "/dashboard/admin"
+              }
+            >
               <LayoutDashboard
                 size={16}
                 className="opacity-60"
@@ -66,7 +70,6 @@ export default function UserMenu() {
           </DropdownMenuItem>
           <DropdownMenuItem asChild>
             <Link href="#">
-              {" "}
               <UserPenIcon
                 size={16}
                 className="opacity-60"

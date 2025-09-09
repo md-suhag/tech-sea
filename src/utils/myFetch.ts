@@ -1,12 +1,13 @@
 "use server";
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import { cookies } from "next/headers";
 
 export interface FetchResponse {
   success: boolean;
   message?: string;
   data?: any;
-  pagination?: {
+  meta?: {
     total: number;
     page: number;
     limit: number;
@@ -39,6 +40,9 @@ export const myFetch = async (
 ): Promise<FetchResponse> => {
   const accessToken = token;
 
+  const cookieStore = await cookies();
+  const tokenCookie = cookieStore.get("accessToken");
+
   const isFormData = body instanceof FormData;
   const hasBody = body !== undefined && method !== "GET";
 
@@ -49,11 +53,14 @@ export const myFetch = async (
     ...(accessToken ? { Authorization: `${accessToken}` } : {}),
   };
 
+  if (tokenCookie) {
+    reqHeaders["Cookie"] = `${tokenCookie.name}=${tokenCookie.value}`;
+  }
+
   try {
     const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}${url}`, {
       method,
       headers: reqHeaders,
-      credentials: "include",
       ...(hasBody && { body: isFormData ? body : JSON.stringify(body) }),
       ...(tags && { next: { tags } }),
       ...(!(method === "GET") ? { cache: "no-store" } : { cache: cache }),
@@ -66,7 +73,7 @@ export const myFetch = async (
         success: data?.success ?? true,
         message: data?.message,
         data: data?.data,
-        pagination: data?.pagination,
+        meta: data?.meta,
         error: null,
       };
     }
