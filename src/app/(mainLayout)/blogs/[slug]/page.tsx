@@ -1,13 +1,18 @@
+import AllComentsOfBlog from "@/components/modules/blog/AllComentsOfBlog";
 import { BlogContent } from "@/components/modules/blog/BlogContent";
+import CommentBox from "@/components/modules/blog/CommentBox";
 import { myFetch } from "@/utils/myFetch";
 import Image from "next/image";
 
 export default async function BlogDetails({
   params,
+  searchParams,
 }: {
   params: { slug: string };
+  searchParms: { [key: string]: string | string[] | undefined };
 }) {
   const { slug } = await params;
+
   const res = await myFetch(`/blogs/${slug}`, { method: "GET" });
 
   return (
@@ -25,6 +30,10 @@ export default async function BlogDetails({
         className="w-full  "
       />
       <BlogContent content={res.data?.description ?? ""} />
+
+      <CommentBox id={res.data?._id} />
+      {/* Comments Section */}
+      <AllComentsOfBlog id={res.data?._id} />
     </div>
   );
 }
