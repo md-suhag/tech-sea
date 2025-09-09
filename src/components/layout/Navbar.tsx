@@ -93,10 +93,10 @@ export default function Navbar() {
                   <NavigationMenuItem key={index}>
                     <NavigationMenuLink
                       active={link.active}
-                      href={link.href}
                       className="text-muted-foreground hover:text-primary py-1.5 font-medium"
+                      asChild
                     >
-                      {link.label}
+                      <Link href={link.href}>{link.label}</Link>
                     </NavigationMenuLink>
                   </NavigationMenuItem>
                 ))}
