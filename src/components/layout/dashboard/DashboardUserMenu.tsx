@@ -37,7 +37,7 @@ export default function DashboardUserMenu() {
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Button variant="ghost" className="h-auto p-0  hover:bg-transparent">
-          <Avatar className="border border-primary/50">
+          <Avatar className="border border-primary/40">
             <AvatarImage src="./avatar.jpg" alt="Profile image" />
             <AvatarFallback>User</AvatarFallback>
           </Avatar>
